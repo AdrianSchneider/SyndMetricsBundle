@@ -1,0 +1,18 @@
+{
+    "name": "syndicatetheory/metrics-bundle",
+    "type": "symfony-bundle",
+    "description": "[IN DEVELOPMENT] Symfony2 Metric Tracking Bundle",
+    "authors": [
+        {
+            "name": "Adrian Schneider",
+            "email": "adrian@syndicatetheory.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.2"
+    },
+    "autoload": {
+        "psr-0": { "Synd\\MetricsBundle": "" }
+    },
+    "target-dir": "Synd/MetricsBundle"
+}
