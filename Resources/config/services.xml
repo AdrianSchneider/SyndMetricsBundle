@@ -9,6 +9,7 @@
     </parameters>
     <services>
         <service id="synd_metrics.tracker" class="%synd_metrics.tracker_class%">
+            <argument type="service" id="session" />
             <argument type="service" id="doctrine.orm.entity_manager" />
         </service>
         <service id="synd_metrics.tracker_listener" class="%synd_metrics.tracker_listener_class%">
