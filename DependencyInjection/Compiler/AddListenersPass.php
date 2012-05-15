@@ -10,6 +10,10 @@ use Symfony\Component\Yaml\Parser;
 
 class AddListenersPass implements CompilerPassInterface
 {
+    /**
+     * Registers our metric listen to listen to all events found in bundle configuration
+     * @param    ContainerBuilder
+     */
     public function process(ContainerBuilder $container)
     {
         if (!$container->hasDefinition('synd_metrics.metric_listener')) {
@@ -38,6 +42,11 @@ class AddListenersPass implements CompilerPassInterface
         return $events;
     }
     
+    /**
+     * Grabs a list of all registered bundle directories from the container
+     * @param    ContainerBuilder
+     * @return   array        Directories containing active bundles
+     */
     protected function getBundleDirectories($container)
     {
         $dirs = array();
@@ -49,6 +58,13 @@ class AddListenersPass implements CompilerPassInterface
         return $dirs;
     }
     
+    /**
+     * Grabs a list of all events (trackable metrics) for a given bundle directory
+     * Assumes Resources/config/metrics.yml
+     * 
+     * @param    string        Bundle directory
+     * @return   array         List of events to track, empty array if not found
+     */
     protected function getBundleEvents($bundleDir)
     {
         if (!file_exists($configFile = "$bundleDir/Resources/config/metrics.yml")) {
