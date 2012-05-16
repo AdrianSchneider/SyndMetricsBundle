@@ -9,19 +9,19 @@ use Symfony\Component\EventDispatcher\Event;
 class MetricListener
 {
     /**
-     * @var    EventDispatcher
+     * @var    Symfony\Component\EventDispatcher\EventDispatcherInterface
      */
     protected $dispatcher;
     
     /**
-     * @var    TrackerListener
+     * @var    Synd\MetricsBundle\Listener\TrackerListener
      */
     protected $listener;
     
     /**
      * Brings deps into scope
-     * @param    EventDispatcher
-     * @param    TrackerListener
+     * @param    Symfony\Component\EventDispatcher\EventDispatcherInterface
+     * @param    Synd\MetricsBundle\Listener\TrackerListener
      */
     public function __construct(EventDispatcherInterface $dispatcher, TrackerListener $listener)
     {
