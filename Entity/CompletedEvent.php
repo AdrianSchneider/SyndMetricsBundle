@@ -18,7 +18,7 @@ class CompletedEvent
     protected $id;
     
     /**
-     * @ORM\ManyToOne(targetEntity="Event", onDelete="CASCADE")
+     * @ORM\ManyToOne(targetEntity="Event")
      */
     protected $event;
     
