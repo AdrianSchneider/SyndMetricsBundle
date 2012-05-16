@@ -39,7 +39,7 @@ class MetricListener
     }
     
     /**
-     * Placed to trigger a callback
+     * respond to kernel.request to init. service
      */
     public function onKernelRequest(Event $event)
     {
