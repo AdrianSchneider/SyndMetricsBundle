@@ -12,7 +12,12 @@ SyndMetricsBundle adds easy metric tracking to your application. Its goal is to 
                 - signup_form      #   as stuff occurs
                 - signup_complete
 
-Each funnel item represents an event name, which you call from the dispatcher. It'll automatically store the event was created, and other associated information.
+Each funnel item represents an event name, which you call from the dispatcher. Upon running
+  
+    app/console synd:metrics:sync
+    app/console cache:clear
+
+the system will save your new events, listen for them, and store metric data automatically.
 
 Planned features:
 - **area to view stats, or at least fetch**
