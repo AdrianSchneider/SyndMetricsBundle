@@ -11,19 +11,19 @@ use Doctrine\ORM\EntityManager;
 class Tracker
 {
     /**
-     * @var    Session
+     * @var    Symfony\Component\HttpFoundation\Session
      */
     protected $session;
     
     /**
-     * @var    EntityManager
+     * @var    Doctrine\ORM\EntityManager
      */
     protected $em;
     
     /**
      * Brings deps into scope
-     * @param    Session
-     * @param    EventityManager
+     * @param    Symfony\Component\HttpFoundation\Session
+     * @param    Doctrine\ORM\EntityManager
      */
     public function __construct(Session $session, EntityManager $em)
     {
