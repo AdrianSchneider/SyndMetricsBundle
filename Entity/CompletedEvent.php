@@ -18,7 +18,7 @@ class CompletedEvent
     protected $id;
     
     /**
-     * @ORM\ManyToOne(targetEntity="Event")
+     * @ORM\ManyToOne(targetEntity="Event", onDelete="CASCADE")
      */
     protected $event;
     
@@ -37,7 +37,7 @@ class CompletedEvent
      *
      * @param Synd\MetricsBundle\Entity\Event $event
      */
-    public function setEvent(Synd\MetricsBundle\Entity\Event $event)
+    public function setEvent(\Synd\MetricsBundle\Entity\Event $event)
     {
         $this->event = $event;
     }
