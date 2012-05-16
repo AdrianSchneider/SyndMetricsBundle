@@ -3,6 +3,7 @@
 namespace Synd\MetricsBundle\Listener;
 
 use Synd\MetricsBundle\Tracker\Tracker;
+use Synd\MetricsBundle\Repository\EventRepository;
 use Symfony\Component\EventDispatcher\Event;
 
 class TrackerListener
@@ -13,21 +14,30 @@ class TrackerListener
     protected $tracker;
     
     /**
-     * Brings deps into scope
-     * @param    Tracker
+     * @var    EventRepository
      */
-    public function __construct(Tracker $tracker)
+    protected $eventRepository;
+    
+    /**
+     * Brings deps into scope
+     * @param    Synd\MetricsBundle\Tracker\Tracker
+     * @param    Synd\MetricsBundle\Repository\EventRepository
+     */
+    public function __construct(Tracker $tracker, EventRepository $repository)
     {
         $this->tracker = $tracker;
+        $this->eventRepository = $repository;
     }
     
     /**
      * Placeholder to show API
-     * @param    Event        Event being executed
+     * XXX we're unable to pass custom data through event manager, so __call is workaround
+     * 
+     * @param    Event        Event Dispatcher event 
      */
-    protected function track(Event $event)
+    protected function track_eventname(Event $event)
     {
-        throw new \BadMethodCallException("track() should never be called directly");
+        
     }
     
     /**
@@ -38,9 +48,15 @@ class TrackerListener
     public function __call($method, array $args)
     {
         if (substr($method, 0, 6) != 'track_') {
-            throw new RuntimeException('Method not found');
+            throw new \RuntimeException(sprintf('"%s" is not a valid tracker method', $method));
         }
         
-        return $this->tracker->track($args[0], substr($method, 6));
+        $eventName = substr($method, 6);
+        
+        if (!$event = $this->eventRepository->find($eventName)) {
+            throw new \InvalidArgumentException(sprintf('"%s" is not a valid trackable event', $eventName));
+        }
+        
+        return $this->tracker->track($event, $args[0]);
     }
 }

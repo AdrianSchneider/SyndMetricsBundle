@@ -2,8 +2,9 @@
 
 namespace Synd\MetricsBundle\Tracker;
 
-use Synd\MetricsBundle\Entity\Metric;
-use Symfony\Component\EventDispatcher\Event;
+use Synd\MetricsBundle\Entity\Event;
+use Synd\MetricsBundle\Entity\CompletedEvent;
+use Symfony\Component\EventDispatcher\Event as DispatchedEvent;
 use Symfony\Component\HttpFoundation\Session;
 use Doctrine\ORM\EntityManager;
 
@@ -32,17 +33,17 @@ class Tracker
     
     /**
      * Stores a trackable metric
-     * @param    Event
-     * @param    string        Event Name
+     * @param    Synd\MetricsBundle\Entity\Event
+     * @param    Symfony\Component\EventDispatcher\Event
      */
-    public function track(Event $event, $eventName)
+    public function track(Event $event, DispatchedEvent $dispatchedEvent)
     {
-        $metric = new Metric();
-        $metric->setEvent($eventName);
-        $metric->setSession($this->session->getId());
-        $metric->setDate(new \DateTime());
+        $completed = new CompletedEvent();
+        $completed->setEvent($event);
+        $completed->setSession($this->session->getId());
+        $completed->setDate(new \DateTime());
 
-        $this->em->persist($metric);
+        $this->em->persist($completed);
         $this->em->flush();
     }
 }

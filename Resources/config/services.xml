@@ -6,19 +6,68 @@
         <parameter key="synd_metrics.tracker_class">Synd\MetricsBundle\Tracker\Tracker</parameter>
         <parameter key="synd_metrics.tracker_listener_class">Synd\MetricsBundle\Listener\TrackerListener</parameter>
         <parameter key="synd_metrics.metric_listener_class">Synd\MetricsBundle\Listener\MetricListener</parameter>
+        <parameter key="synd_metrics.controller_class">Synd\MetricsBundle\Controller\MetricsController</parameter>
+        <parameter key="synd_metrics.sync_class">Synd\MetricsBundle\Sync\SyncEventData</parameter>
     </parameters>
     <services>
+    
+        <!-- #### CORE SERVICES #### -->
+        
         <service id="synd_metrics.tracker" class="%synd_metrics.tracker_class%">
             <argument type="service" id="session" />
             <argument type="service" id="doctrine.orm.entity_manager" />
         </service>
+        
         <service id="synd_metrics.tracker_listener" class="%synd_metrics.tracker_listener_class%">
             <argument type="service" id="synd_metrics.tracker" />
+            <argument type="service" id="synd_metrics.event_repository" />
         </service>
+        
         <service id="synd_metrics.metric_listener" class="%synd_metrics.metric_listener_class%">
             <argument type="service" id="event_dispatcher" />
             <argument type="service" id="synd_metrics.tracker_listener" />
             <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" />
         </service>
+        
+        <!--  #### SYNC #### -->
+        
+        <service id="synd_metrics.sync" class="%synd_metrics.sync_class%">
+        
+        </service>
+        
+        <!-- #### CONTROLLERS #### -->
+        
+        <service id="synd_metrics.controller" class="%synd_metrics.controller_class%">
+            <argument type="service" id="templating" />
+            <argument type="service" id="synd_metrics.completedevent_repository" /> 
+        </service>
+        
+        <!--  #### REPOSITORIES #### -->
+        
+        <service id="synd_metrics.event_repository" 
+            factory-service="doctrine.orm.entity_manager" 
+            factory-method="getRepository"
+            class="Synd\MetricsBundle\Repository\EventRepository">
+            
+            <argument>Synd\MetricsBundle\Entity\Event</argument>
+        </service>
+        
+        <service id="synd_metrics.funnel_repository" 
+            factory-service="doctrine.orm.entity_manager" 
+            factory-method="getRepository"
+            class="Synd\MetricsBundle\Repository\FunnelRepository">
+            
+            <argument>Synd\MetricsBundle\Entity\Funnel</argument>
+        </service>
+        
+        <service id="synd_metrics.completedevent_repository" 
+            factory-service="doctrine.orm.entity_manager" 
+            factory-method="getRepository"
+            class="Synd\MetricsBundle\Repository\CompletedEventRepository">
+            
+            <argument>Synd\MetricsBundle\Entity\CompletedEvent</argument>
+        </service>
+        
+        
     </services>
 </container>

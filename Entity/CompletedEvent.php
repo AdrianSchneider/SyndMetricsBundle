@@ -6,8 +6,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
+ * @ORM\Table(name="metrics_completed")
  */
-class Metric
+class CompletedEvent
 {
     /**
      * @ORM\Id
@@ -17,7 +18,7 @@ class Metric
     protected $id;
     
     /**
-     * @ORM\Column(type="string")
+     * @ORM\ManyToOne(targetEntity="Event")
      */
     protected $event;
     
@@ -34,9 +35,9 @@ class Metric
     /**
      * Set event
      *
-     * @param string $event
+     * @param Synd\MetricsBundle\Entity\Event $event
      */
-    public function setEvent($event)
+    public function setEvent(Synd\MetricsBundle\Entity\Event $event)
     {
         $this->event = $event;
     }
@@ -44,7 +45,7 @@ class Metric
     /**
      * Get event
      *
-     * @return string 
+     * @return Synd\MetricsBundle\Entity\Event 
      */
     public function getEvent()
     {
