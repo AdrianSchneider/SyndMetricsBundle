@@ -54,23 +54,35 @@ class SyncEventData
         $events  = $this->indexCollectionById($this->eventRepository->findAll());
         $funnels = $this->indexCollectionById($this->funnelRepository->findAll()); 
         
+        $checkEvents  = $events;
+        $checkFunnels = $funnels;
+        
+        $configuredEvents  = array();
+        $configuredFunnels = array();
+        
         foreach ($this->finder->getConfig() as $funnelName => $funnelConfig) {
+            $configuredFunnels[] = $funnelName;
+            
             $funnelEvents = $funnelConfig['funnel'];
             
-            if (!isset($funnels[$funnelName])) {
+            if (!isset($checkFunnels[$funnelName])) {
                 $funnel = new Funnel();
                 $funnel->setId($funnelName);
+                $checkFunnels[$funnelName] = $funnel;
                 $this->em->persist($funnel);
             } else {
-                $funnel = $funnels[$funnelName];
+                $funnel = $checkFunnels[$funnelName];
             }
             
             foreach ($funnelEvents as $order => $eventName) {
-                if (!isset($events[$eventName])) {
+                $configuredEvents[] = $eventName;
+                
+                if (!isset($checkEvents[$eventName])) {
                     $event = new Event();
                     $event->setId($eventName);
+                    $checkEvents[$eventName] = $event;
                 } else {
-                    $event = $events[$eventName];
+                    $event = $checkEvents[$eventName];
                 }
                 
                 $funnelEvent = null;
@@ -90,6 +102,18 @@ class SyncEventData
                 
                 $this->em->persist($event);
                 $this->em->persist($funnelEvent);
+            }
+        }
+        
+        foreach ($funnels as $funnel) {
+            if (!in_array($funnel->getId(), $configuredFunnels)) {
+                $this->em->remove($funnel);
+            }
+        }
+        
+        foreach ($events as $event) {
+            if (!in_array($event->getId(), $configuredEvents)) {
+                $this->em->remove($event);
             }
         }
         

@@ -14,14 +14,14 @@ class FunnelEvent
     /**
      * @ORM\Id
      * @ORM\ManyToOne(targetEntity="Funnel", inversedBy="events")
-     * @ORM\JoinColumn(name="funnel_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="funnel_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $funnel;
     
     /**
      * @ORM\Id
      * @ORM\ManyToOne(targetEntity="Event", inversedBy="funnels")
-     * @ORM\JoinColumn(name="event_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="event_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $event;
     
