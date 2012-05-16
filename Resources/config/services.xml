@@ -8,10 +8,11 @@
         <parameter key="synd_metrics.metric_listener_class">Synd\MetricsBundle\Listener\MetricListener</parameter>
         <parameter key="synd_metrics.controller_class">Synd\MetricsBundle\Controller\MetricsController</parameter>
         <parameter key="synd_metrics.sync_class">Synd\MetricsBundle\Sync\SyncEventData</parameter>
+        <parameter key="synd_metrics.finder_class">Synd\MetricsBundle\Config\MetricsFinder</parameter>
     </parameters>
     <services>
     
-        <!-- #### CORE SERVICES #### -->
+        <!-- #### Runtime Services #### -->
         
         <service id="synd_metrics.tracker" class="%synd_metrics.tracker_class%">
             <argument type="service" id="session" />
@@ -29,20 +30,27 @@
             <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" />
         </service>
         
-        <!--  #### SYNC #### -->
+        <!--  #### Tools #### -->
         
         <service id="synd_metrics.sync" class="%synd_metrics.sync_class%">
-        
+            <argument type="service" id="synd_metrics.finder" />
+            <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument type="service" id="synd_metrics.event_repository" />
+            <argument type="service" id="synd_metrics.funnel_repository" />
         </service>
         
-        <!-- #### CONTROLLERS #### -->
+        <service id="synd_metrics.finder" class="%synd_metrics.finder_class%">
+            <argument>%kernel.bundles%</argument>
+        </service>
+        
+        <!-- #### Controllers #### -->
         
         <service id="synd_metrics.controller" class="%synd_metrics.controller_class%">
             <argument type="service" id="templating" />
             <argument type="service" id="synd_metrics.completedevent_repository" /> 
         </service>
         
-        <!--  #### REPOSITORIES #### -->
+        <!--  #### Repositories #### -->
         
         <service id="synd_metrics.event_repository" 
             factory-service="doctrine.orm.entity_manager" 

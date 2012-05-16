@@ -20,6 +20,6 @@ class SyncMetricsCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $eventRepository = $this->container->get('synd_metrics.event_repository');
+        $this->getContainer()->get('synd_metrics.sync')->sync();
     }
 }
